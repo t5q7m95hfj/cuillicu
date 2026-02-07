@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>music</title>
+
+  <style>
+    :root{
+      --w: 58rem;
+      --pad: 1.25rem;
+      --muted: rgba(0,0,0,.6);
+      --rule: rgba(0,0,0,.14);
+      --border: rgba(0,0,0,.18);
+      --border2: rgba(0,0,0,.28);
+    }
+
+    body{
+      margin:0;
+      background:#fff;
+      color:#000;
+      font:16px/1.75 "Charter", "Iowan Old Style", Charter, "Bitstream Charter",
+           "Times New Roman", serif;
+      letter-spacing:.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main{
+      max-width: var(--w);
+      margin: 0 auto 2.5rem;
+      padding: 0 var(--pad);
+    }
+
+    header{ height: 6rem; } /* empty header spacer */
+
+    /* GRID */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* CARD */
+    .card{
+      border: 1px solid transparent;
+      padding: .9rem;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .card:hover{ border-color: var(--border); color: rgba(0,0,0,.78); }
+    .card.active{ border-color: var(--border2); }
+
+    .cover{
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display:block;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.10);
+    }
+
+    .meta{
+      margin-top: .75rem;
+      display:flex;
+      justify-content: space-between;
+      gap: .75rem;
+      align-items: baseline;
+    }
+    .title{
+      font-size: .98rem;
+      color: rgba(0,0,0,.72);
+    }
+    .alias{
+      font-size: .9rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* PLAYER + LYRICS PANEL */
+    .panel{
+      margin-top: 2.25rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: baseline;
+      margin-bottom: .75rem;
+    }
+    .panel-track{
+      color: rgba(0,0,0,.72);
+      font-size: 1rem;
+    }
+    .panel-alias{
+      color: var(--muted);
+      font-size: .92rem;
+      white-space: nowrap;
+    }
+
+    audio{
+      width:100%;
+      display:block;
+      margin: .75rem 0 1.25rem;
+    }
+
+    .lyrics{
+      margin:0;
+      white-space: pre-wrap;
+      font-family: inherit; /* IMPORTANT: no monospace */
+      color: rgba(0,0,0,.85);
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: .92rem;
+      margin-top: .75rem;
+    }
+
+    /* FOOTER (your single-line horizon) */
+    .footer-line{
+      margin-top: 5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--rule);
+
+      max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      column-gap: 3rem;
+
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .footer-line .left{
+      text-align: left;
+      padding-right: 1rem;
+    }
+
+    .footer-line .center{
+      text-align: center;
+      font-style: italic;
+      padding: 0 1rem;
+    }
+
+    .footer-line .right{
+      text-align: right;
+      white-space: nowrap;
+      padding-left: 1rem;
+    }
+
+    .footer-line a{
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,0,0,.3);
+    }
+    .footer-line a:hover{ border-bottom-color: transparent; }
+
+    @media (max-width: 640px){
+      .footer-line{
+        grid-template-columns: 1fr;
+        row-gap: .75rem;
+        text-align: center;
+      }
+      .footer-line .left,
+      .footer-line .right{
+        text-align: center;
+        padding: 0;
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header></header>
+
+    <!-- 2 x 3 album cards -->
+    <section class="grid" id="grid"></section>
+
+    <!-- Player + lyrics show here after click -->
+    <section class="panel" id="panel" hidden>
+      <div class="panel-head">
+        <div class="panel-track" id="panelTrack"></div>
+        <div class="panel-alias" id="panelAlias"></div>
+      </div>
+
+      <audio id="audio" controls preload="metadata"></audio>
+
+      <pre class="lyrics" id="lyrics"></pre>
+      <div class="hint" id="hint"></div>
+    </section>
+
+<footer class="footer-line">
+  <span class="left"><a href="/">home</a></span>
+
+  <span class="center">
+    i tear down walls to erect statues
+  </span>
+
+  <span class="right">
+    © Joseph Markman / mav / P. Smyth, 2026.
+  </span>
+</footer>
+  </main>
+
+  <script>
+    // ---- CONFIG ----
+    // Put your files here:
+    // Images: /music/img/<id>.jpg  (or .png)
+    // Audio:  /music/audio/<id>.mp3 (or .m4a)
+    //
+    // TIP: keep ids simple and filesystem-safe.
+    const TRACKS = [
+      { id: "84-turbatio",   title: "84",      alias: "(turbatio)",        img: "music/img/turbatio.jpg",   audio: "music/audio/84.m4a" },
+      { id: "80sten-fancitize", title: "80$ten", alias: "(fancitize)",     img: "music/img/fancitize.png", audio: "music/audio/80$ten.m4a" },
+      { id: "telco-xeno-hunahuna", title: "telco", alias: "(xeno hunahuna)", img: "music/img/xeno-hunahuna.jpg", audio: "music/audio/telco.m4a" },
+      { id: "horse-lol-undulately-yours", title: "horse lol", alias: "(undulately yours)", img: "music/img/undulately-yours.jpg", audio: "music/audio/horse-lol.m4a" },
+      { id: "omg-pacate",    title: "omg",     alias: "(pacate)",          img: "music/img/pacate.jpg",    audio: "music/audio/omg.m4a" },
+      { id: "xo-buxy-haazl", title: "xo buxy", alias: "(haazl)",           img: "music/img/haazl.png", audio: "music/audio/xo-buxy.m4a" },
+    ];
+
+    // ---- LYRICS ----
+    // Paste lyrics here. Keep as plain text. Line breaks preserved.
+const LYRICS = {
+  // no entry for these (instrumental / no lyrics):
+  // "84-turbatio"
+  // "80sten-fancitize"
+  // "xo-buxy-haazl"
+
+  "telco-xeno-hunahuna": `i am owed my forgiveness, 
+stricken, fricken home of the witness
+
+with arms out-wide
+i melt inside
+
+i am bored of the tolerance
+give me something harder, annihilate 
+my childish side,
+my harlequinned, upended lullaby
+
+i want more of a maple shade grey
+a faster naticoid headed sun-bound
+in november, i prey like a telco
+
+i still wave my american flag
+growing up my daddy told me to
+
+with arms out-wide
+a kinda form of nationalistic pride`,
+  "horse-lol-undulately-yours": `dompteur des yeux
+unbridled stance
+a harnessed dance
+and i spin around
+
+manège à trois
+you, me, and heartbreak
+saddled up
+and ready to fall
+
+free rein back into the stable
+to get down from off your high-horse
+
+me, fast-tracked 
+into oblivion
+my eyes were just the score but not the prize`,
+  "omg-pacate": `oh my god
+i bear a fruitless tree
+i want to plant it far
+where no eyes can see
+
+oh my god
+i bear a fruitless tree
+i want to plant it far away
+`,
+};
+
+    // ---- RENDER ----
+    const grid = document.getElementById("grid");
+    const panel = document.getElementById("panel");
+    const panelTrack = document.getElementById("panelTrack");
+    const panelAlias = document.getElementById("panelAlias");
+    const audioEl = document.getElementById("audio");
+    const lyricsEl = document.getElementById("lyrics");
+    const hintEl = document.getElementById("hint");
+
+    let activeId = null;
+
+    function renderCards(){
+      grid.innerHTML = "";
+      TRACKS.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.id = t.id;
+
+        const img = document.createElement("img");
+        img.className = "cover";
+        img.src = t.img;
+        img.alt = t.title;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const title = document.createElement("div");
+        title.className = "title";
+        title.textContent = t.title;
+
+        const alias = document.createElement("div");
+        alias.className = "alias";
+        alias.textContent = t.alias;
+
+        meta.appendChild(title);
+        meta.appendChild(alias);
+
+        card.appendChild(img);
+        card.appendChild(meta);
+
+        card.addEventListener("click", () => toggleTrack(t.id));
+        grid.appendChild(card);
+      });
+    }
+
+    function selectTrack(id){
+      activeId = id;
+
+      // highlight active card
+      document.querySelectorAll(".card").forEach(c => {
+        c.classList.toggle("active", c.dataset.id === id);
+      });
+
+      const t = TRACKS.find(x => x.id === id);
+      panelTrack.textContent = t.title;
+      panelAlias.textContent = t.alias;
+
+      audioEl.src = t.audio;
+
+      const lyr = LYRICS[id];
+
+if (lyr && lyr.trim() !== "") {
+  lyricsEl.textContent = lyr;
+  lyricsEl.hidden = false;
+} else {
+  lyricsEl.textContent = "";
+  lyricsEl.hidden = true;
+}
+
+      panel.hidden = false;
+
+      // gentle scroll into view (feels like “opening”)
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    renderCards();
+
+function closePanel(){
+  // un-highlight cards
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+
+  // stop audio + clear selection
+  audioEl.pause();
+  audioEl.removeAttribute("src");
+  audioEl.load();
+
+  lyricsEl.textContent = "";
+  lyricsEl.hidden = true;
+
+  panel.hidden = true;
+  activeId = null;
+}
+
+function toggleTrack(id){
+  if (activeId === id && panel.hidden === false){
+    closePanel();
+    return;
+  }
+  selectTrack(id);
+}
+
+
+
+  </script>
+</body>
+</html>

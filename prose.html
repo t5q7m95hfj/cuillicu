@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>prose</title>
+
+  <style>
+    :root{
+      --w: 42rem;
+      --pad: 1.25rem;
+      --muted: rgba(0,0,0,.6);
+      --rule: rgba(0,0,0,.14);
+    }
+
+    body{
+      margin:0;
+      background:#fff;
+      color:#000;
+      font:16px/1.75 "Charter","Iowan Old Style","Times New Roman",serif;
+      letter-spacing:.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main{
+      max-width: var(--w);
+      margin: 0 auto 2.5rem;
+      padding: 0 var(--pad);
+    }
+
+    /* empty header descent */
+    header{
+      height: 6rem;
+    }
+
+    /* cover */
+    .cover{
+      width:100%;
+      max-width: 18rem;
+      display:block;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* title block */
+    .title{
+      text-align:center;
+      margin-bottom: 3rem;
+    }
+    .title h1{
+      font-size: 1.15rem;
+      font-weight: normal;
+      margin: 0 0 .35rem;
+    }
+    .title .author{
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    /* prose text */
+    .prose p{
+      margin: 0 0 1.25rem;
+    }
+
+    .prose p:last-child{
+      margin-bottom: 0;
+    }
+
+.date{
+  color: var(--muted);
+  font-size: .9rem;
+  margin-bottom: 1.25rem;
+}
+
+    /* footer horizon */
+    .footer-line{
+      margin-top: 5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--rule);
+
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      column-gap: 3rem;
+
+      font-size: .9rem;
+      color: var(--muted);
+
+      max-width: 42rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-line .left{ text-align:left; }
+    .footer-line .center{ text-align:center; font-style: italic; }
+    .footer-line .right{ text-align:right; white-space:nowrap; }
+
+    .footer-line a{
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,0,0,.3);
+    }
+    .footer-line a:hover{ border-bottom-color: transparent; }
+
+    @media (max-width: 640px){
+      .footer-line{
+        grid-template-columns: 1fr;
+        row-gap: .75rem;
+        text-align: center;
+      }
+      .footer-line .left,
+      .footer-line .right{
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header></header>
+
+    <!-- cover image -->
+    <img class="cover" src="prose/img/jupiters-diary.png" alt="Jupiter’s diary cover">
+
+    <!-- prose excerpt -->
+    <section class="prose">
+  <p class="date">14 feb</p>
+
+  <p>My feet are cold as I sit in bed - alone…</p>
+
+  <p>Happy Valentine’s Day to my single self for the umpteenth time. Why hasn’t AI bioengineered me a perfect man? Or at least matched me with an imperfect one. Are my standards too high?</p>
+
+  <p>No, but my expectations are.</p>
+
+  <p>The truth is… I don’t want a man. Not in the “I’m straight” sense, but as in: would I actually feel fulfilled by being doted on by a partner? And frankly, I don’t believe I deserve that anyway…</p>
+
+  <p>I &lt;3 myself - in theory but not in practice.</p>
+
+  <p>My life is a conscious contradiction. It’s like I’m the moon to my own planet, barely hanging in orbit by the delicate balance of gravitational forces. I have an “objective” and out of body view of myself, but I’m still just a self. And what is a self anyway? That which is defined in relation to the other?</p>
+
+  <p>I am the other and the self, the one and the many, defined in relation to myself and to others.</p>
+
+  <p>I’m boring myself already…</p>
+
+  <p>Well anyway, at the store today I was reminded just how much of a capitalistically-contrived, meaning-averse, arbitrary pity of a holiday Valentine’s Day really is.</p>
+
+  <p>Pathetic men buying pathetic cards and pathetic flowers which will never see the sun and are supposed to symbolize eternal love but will probably be in the garbage by Friday.</p>
+
+  <p>One guy was getting mad at the cashier because the envelope didn’t fit his $6 Hallmark card. A piece of card-stock with a generic platitude at such an exorbitant cost. Smells like love to me!</p>
+
+  <p>And why don’t we philosophize anymore?</p>
+
+  <p>I mean, wouldn’t a truer gesture of love be to recreate a modern version of Plato’s Symposium - where we get drunk and profess our odes to the deity of Love?</p>
+
+  <p>Like Diomita said: Love is our humanly attempt at attaining immortality, with love being passed from parent to child, from one generation to the next, through a process of unbridled succession.</p>
+
+  <p>And I love platonic love - a love of love itself, as meta as Plato’s tale.</p>
+
+  <p>I &lt;3 myself after all, and that’s as meta as it can get.</p>
+
+  <p>Well, enough rambling for now.</p>
+
+  <p>Goodnight Jupiter and all my moons. xoxo.</p>
+</section>
+
+
+    <footer class="footer-line">
+      <span class="left"><a href="/">home</a></span>
+      <span class="center">i tear down walls to erect statues</span>
+      <span class="right">© Joseph Markman / mav / P. Smyth, 2026.</span>
+    </footer>
+  </main>
+</body>
+</html>
