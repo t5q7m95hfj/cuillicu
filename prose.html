@@ -144,6 +144,7 @@
     }
 
 @media (prefers-color-scheme: dark) {
+  /* base */
   body {
     background: #0f0f0f;
     color: #eaeaea;
@@ -153,16 +154,35 @@
     color: #eaeaea;
   }
 
-  .card,
+  /* prose cards (FIX: remove forced white background) */
+  .card {
+    background: transparent; /* key fix */
+    border-color: rgba(255,255,255,.18);
+    color: #eaeaea;
+  }
+
+  .card.active {
+    border-color: rgba(255,255,255,.35);
+  }
+
+  .title {
+    color: #eaeaea;
+  }
+
+  .subtitle {
+    color: rgba(234,234,234,.65);
+  }
+
+  /* panel text + meta */
   .panel {
     border-color: rgba(255,255,255,.18);
   }
 
-  .subtitle,
-  .meta {
+  .panel .meta {
     color: rgba(234,234,234,.65);
   }
 
+  /* footer */
   .footer-line {
     border-top-color: rgba(255,255,255,.25);
     color: rgba(234,234,234,.75);
