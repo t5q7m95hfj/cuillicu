@@ -52,7 +52,7 @@
       opacity:1;
     }
 
-    @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   body {
     background: #0f0f0f;
     color: #eaeaea;
@@ -67,13 +67,23 @@
     border-color: rgba(255,255,255,.18);
   }
 
-  .footer-line {
-    border-top-color: rgba(255,255,255,.18);
-  }
-
   .subtitle,
   .meta {
     color: rgba(234,234,234,.65);
+  }
+
+  .footer-line {
+    border-top-color: rgba(255,255,255,.25);
+    color: rgba(234,234,234,.75);
+  }
+
+  .footer-line a {
+    color: rgba(234,234,234,.85);
+    border-bottom-color: rgba(255,255,255,.35);
+  }
+
+  .footer-line a:hover {
+    border-bottom-color: transparent;
   }
 }
   </style>
